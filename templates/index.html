@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FILTEreD - Language Translation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .form-control {
+            border-radius: 5px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            font-weight: bold;
+        }
+        .translation-result {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FILTEreD Application</h1>
+        <p class="text-center text-muted">Filipino - Teduray Language Translation</p>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="sentence" class="form-label">Enter a word/phrases:</label>
+                <input type="text" class="form-control" id="sentence" name="sentence" required placeholder="Type your word/phrases here">
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Translate</button>
+            </div>
+        </form>
+
+        {% if translated_sentence %}
+            <div class="translation-result mt-4 p-3 bg-light rounded">
+                <h2 class="text-success mb-3">Translation Results</h2>
+                <p><strong>Detected Language:</strong> {{ detected_language }}</p>
+                <p><strong>Translated Text:</strong> {{ translated_sentence }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

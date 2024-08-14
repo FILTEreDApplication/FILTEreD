@@ -1,0 +1,8 @@
+# Ignore the env folder
+env/
+
+# Ignore the SQLite database file
+db.sqlite3
+
+# Ignore the static folder
+#static/
