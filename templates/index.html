@@ -38,16 +38,13 @@
         .translation-result {
             margin-top: 30px;
         }
-        #loadingSpinner {
-            display: none;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>FILTEreD Application</h1>
         <p class="text-center text-muted">Filipino - Teduray Language Translation</p>
-        <form id="translationForm" method="post">
+        <form method="post" action="">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="sentence" class="form-label">Enter a word/phrases:</label>
@@ -58,17 +55,13 @@
             </div>
         </form>
 
-        <div id="loadingSpinner" class="text-center mt-4">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Translating...</span>
+        {% if translated_sentence %}
+            <div class="translation-result mt-4 p-3 bg-light rounded">
+                <h2 class="text-success mb-3">Translation Results</h2>
+                <p><strong>Detected Language:</strong> {{ detected_language }}</p>
+                <p><strong>Translated Text:</strong> {{ translated_sentence }}</p>
             </div>
-        </div>
-
-        <div id="translationResult" class="translation-result mt-4 p-3 bg-light rounded" style="display:none;">
-            <h2 class="text-success mb-3">Translation Results</h2>
-            <p><strong>Detected Language:</strong> <span id="detectedLanguage"></span></p>
-            <p><strong>Translated Text:</strong> <span id="translatedSentence"></span></p>
-        </div>
+        {% endif %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
