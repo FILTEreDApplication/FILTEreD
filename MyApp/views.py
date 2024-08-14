@@ -102,6 +102,7 @@ def index(request):
 
         # Update context
         context.update({
+            'input_sentence': input_sentence,
             'translated_sentence': translated_sentence,
             'detected_language': detected_language
         })

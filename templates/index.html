@@ -58,6 +58,7 @@
         {% if translated_sentence %}
             <div class="translation-result mt-4 p-3 bg-light rounded">
                 <h2 class="text-success mb-3">Translation Results</h2>
+                <p><strong>Input Text:</strong> {{ input_sentence }}</p>
                 <p><strong>Detected Language:</strong> {{ detected_language }}</p>
                 <p><strong>Translated Text:</strong> {{ translated_sentence }}</p>
             </div>
