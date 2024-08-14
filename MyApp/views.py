@@ -1,28 +1,33 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import json
 from nltk.translate import AlignedSent, IBMModel2
 import pandas as pd
 
-# 2. Prepare and preprocess the data
+
+# Prepare and preprocess the data
 def load_and_preprocess_data(filepath):
     data = pd.read_excel(filepath)
     data = data.dropna()
     data['tokenized_filipino'] = data['FILIPINO'].str.lower().apply(lambda x: x.split())
     data['tokenized_teduray'] = data['TEDURAY'].str.lower().apply(lambda x: x.split())
-    aligned_texts_filipino_to_teduray = [AlignedSent(fil, ted) for fil, ted in zip(data['tokenized_filipino'], data['tokenized_teduray'])]
-    aligned_texts_teduray_to_filipino = [AlignedSent(ted, fil) for fil, ted in zip(data['tokenized_filipino'], data['tokenized_teduray'])]
+    aligned_texts_filipino_to_teduray = [AlignedSent(fil, ted) for fil, ted in
+                                         zip(data['tokenized_filipino'], data['tokenized_teduray'])]
+    aligned_texts_teduray_to_filipino = [AlignedSent(ted, fil) for fil, ted in
+                                         zip(data['tokenized_filipino'], data['tokenized_teduray'])]
     return data, aligned_texts_filipino_to_teduray, aligned_texts_teduray_to_filipino
 
+
 training_filepath = 'static/training_datasets.xlsx'
-training_data, aligned_texts_filipino_to_teduray, aligned_texts_teduray_to_filipino = load_and_preprocess_data(training_filepath)
+training_data, aligned_texts_filipino_to_teduray, aligned_texts_teduray_to_filipino = load_and_preprocess_data(
+    training_filepath)
+
 
 # Load models and parameters (adjust the file paths as needed)
 def load_model_parameters(filename):
     with open(filename, 'r') as f:
         params = json.load(f)
     return params
+
 
 def reconstruct_model(params, aligned_texts):
     model = IBMModel2(aligned_texts, 5)
@@ -32,11 +37,13 @@ def reconstruct_model(params, aligned_texts):
     }
     return model
 
+
 params_filipino_to_teduray = load_model_parameters('static/model_params_filipino_to_teduray.json')
 params_teduray_to_filipino = load_model_parameters('static/model_params_teduray_to_filipino.json')
 
 model_filipino_to_teduray = reconstruct_model(params_filipino_to_teduray, aligned_texts_filipino_to_teduray)
 model_teduray_to_filipino = reconstruct_model(params_teduray_to_filipino, aligned_texts_teduray_to_filipino)
+
 
 # Function to translate sentences
 def translate_sentence(sentence, model):
@@ -53,6 +60,7 @@ def translate_sentence(sentence, model):
             # If the word is not found, append the original word
             translation.append(word)
     return ' '.join(translation)
+
 
 # Function to detect language
 def detect_language(sentence, training_data):
@@ -71,6 +79,7 @@ def detect_language(sentence, training_data):
         return 'Teduray'
     else:
         return 'Unknown'
+
 
 def index(request):
     context = {
