@@ -3,98 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FILTEreD - Language Translation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>FILTEreD - Filipino-Teduray Translator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #343a40;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .container {
-            max-width: 600px;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
+        .animated-gradient {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
         }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-        .form-control {
-            border-radius: 5px;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #007bff;
-            text-align: center;
-            font-weight: bold;
-        }
-        .translation-result {
-            margin-top: 30px;
+        .neon-text {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ff00de, 0 0 35px #ff00de, 0 0 40px #ff00de, 0 0 50px #ff00de, 0 0 75px #ff00de;
         }
     </style>
 </head>
-<body>
-    <div class="container mx-3">
-        <h1>FILTEreD Application</h1>
-        <p class="text-center text-muted">Filipino - Teduray Language Translation</p>
-        <form method="post" action="">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="sentence" class="form-label">Enter a word/phrases:</label>
-                <input type="text" class="form-control" id="sentence" name="sentence" required placeholder="Type your word/phrases here">
-            </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg">Translate</button>
-            </div>
-        </form>
+<body class="animated-gradient min-h-screen flex flex-col justify-center items-center text-white">
+    <div class="container mx-auto px-4 py-12 max-w-3xl">
+        <header class="text-center mb-12 animate__animated animate__fadeInDown">
+            <h1 class="text-6xl font-bold neon-text mb-4">FILTEreD</h1>
+            <p class="text-2xl text-gray-200">Filipino - Teduray Language Translation</p>
+        </header>
+
+        <div class="glass-effect rounded-xl p-8 mb-12 animate__animated animate__fadeInUp">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                <div>
+                    <label for="sentence" class="block text-xl font-medium text-gray-200 mb-2">Enter a word/phrase:</label>
+                    <input type="text" id="sentence" name="sentence" required
+                           class="w-full px-4 py-3 bg-white bg-opacity-20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white text-lg transition duration-300">
+                </div>
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105">
+                    Translate
+                </button>
+            </form>
+        </div>
 
         {% if translated_sentence %}
-            <div class="translation-result mt-4 p-3 bg-light rounded">
-                <h2 class="text-success mb-3">Translation Results</h2>
-                <p><strong>Input Text:</strong> {{ input_sentence }}</p>
-                <p><strong>Detected Language:</strong> {{ detected_language }}</p>
-                <p><strong>Translated Text:</strong> {{ translated_sentence }}</p>
+        <div class="glass-effect rounded-xl p-8 animate__animated animate__fadeIn">
+            <h2 class="text-3xl font-semibold text-purple-300 mb-6">Translation Results</h2>
+            <div class="space-y-4">
+                <p class="transition-all duration-300 hover:pl-2"><span class="font-medium text-gray-300">Input Text:</span> <span class="text-white text-lg">{{ input_sentence }}</span></p>
+                <p class="transition-all duration-300 hover:pl-2"><span class="font-medium text-gray-300">Detected Language:</span> <span class="text-white text-lg">{{ detected_language }}</span></p>
+                <p class="transition-all duration-300 hover:pl-2"><span class="font-medium text-gray-300">Translated Text:</span> <span class="text-white text-lg">{{ translated_sentence }}</span></p>
             </div>
+        </div>
         {% endif %}
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <footer class="text-center mt-12 text-gray-300">
+        <p>&copy; 2024 FILTEreD Application. All rights reserved.</p>
+    </footer>
 
     <script>
-        $(document).ready(function() {
-            $('#translationForm').on('submit', function(event) {
-                event.preventDefault(); // Prevent form from submitting normally
-                $('#loadingSpinner').show(); // Show loading spinner
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const form = document.querySelector('form');
+            const input = document.querySelector('#sentence');
+            const button = form.querySelector('button');
 
-                $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: {
-                        'sentence': $('#sentence').val(),
-                        'csrfmiddlewaretoken': '{{ csrf_token }}'
-                    },
-                    success: function(response) {
-                        $('#loadingSpinner').hide(); // Hide loading spinner
-                        $('#translationResult').show(); // Show translation result
-                        $('#detectedLanguage').text(response.detected_language); // Update detected language
-                        $('#translatedSentence').text(response.translated_sentence); // Update translated sentence
-                    },
-                    error: function() {
-                        $('#loadingSpinner').hide(); // Hide loading spinner
-                        alert('An error occurred. Please try again.');
-                    }
-                });
+            input.addEventListener('focus', () => {
+                input.classList.add('animate__animated', 'animate__pulse');
+            });
+
+            input.addEventListener('blur', () => {
+                input.classList.remove('animate__animated', 'animate__pulse');
+            });
+
+            button.addEventListener('mouseenter', () => {
+                button.classList.add('animate__animated', 'animate__rubberBand');
+            });
+
+            button.addEventListener('animationend', () => {
+                button.classList.remove('animate__animated', 'animate__rubberBand');
             });
         });
     </script>
